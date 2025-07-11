@@ -53,8 +53,12 @@ if(KISSFFT_DATATYPE MATCHES "^simd$")
     endif()
 endif()
 
-find_package(PythonInterp REQUIRED)
-add_test(NAME testkiss.py COMMAND "${PYTHON_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/testkiss.py")
+# Use the modern Python discovery mechanism, which supersedes the
+# deprecated FindPythonInterp module.
+# CMP0148: The FindPythonInterp and FindPythonLibs modules are removed.
+cmake_policy(SET CMP0148 NEW)
+find_package(Python COMPONENTS Interpreter REQUIRED)
+add_test(NAME testkiss.py COMMAND "${Python_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/testkiss.py")
 list(APPEND TESTKISS_PY_ENV "KISSFFT_DATATYPE=${KISSFFT_DATATYPE}")
 list(APPEND TESTKISS_PY_ENV "KISSFFT_OPENMP=${KISSFFT_OPENMP}")
 set_tests_properties(testkiss.py PROPERTIES
